@@ -4,21 +4,39 @@ function conf = trajectory_conf(c)
     RE = 6378e3; % meter
     m  = 1.67262192e-27; % kilogram
     q = 1.602e-19; % Coulomb
-    tau = m/(q*Bo)
+    tau = m/(q*Bo);
     
-    E = 1e7;
-    %vox = sqrt((2*q/m)*E)
-    vox = 1e7;
-    ro = [RE, 0, 0];
+    E = 1e8;
+    vox = sqrt((2*q/m)*E)
+    %vox = 1e7;
+    ro = [3*RE, 0, 0];
     vo = [vox, 0, 0]; % m/s
-    ro = ro/RE;
-    %vo = vo/norm(vo)/10;
-    vo = 100*vo/(RE/tau);
-    tend = 10/tau;
-    %tend = 2*pi*1000;
-    %tend = 0.03;
+
+    conf = struct();    
+    if 1
+        conf.parameters.Bo = 1;
+        conf.parameters.RE = 1;
+        conf.parameters.m = 1;
+        conf.parameters.q = 1;
+        conf.ro = ro/RE;
+        conf.vo = vo/(RE/tau);
+        conf.tend = 20000;
+        conf.tlabel = '$t/\tau$';
+        conf.rlabels = {'$x/R_E$', '$y/R_E$', '$z/R_E$'};
+        conf.vlabels = {'$v_x/(R_E/\tau)$', '$v_y(R_E/\tau)$', '$v_z(R_E/\tau)$'};
+    else
+        conf.parameters.Bo = Bo;
+        conf.parameters.RE = RE;
+        conf.parameters.m = m;
+        conf.parameters.q = q;
+        conf.ro = ro;
+        conf.vo = vo;
+        conf.tend = 2;
+        conf.tlabel = '$t$';
+        conf.rlabels = {'$x$', '$y$', '$z$'};
+        conf.vlabels = {'$v_x$', '$v_y$', '$v_z$'};
+    end
     
-    conf = struct();
     if c == 1
         conf.title = '$\mathbf{B}=-\hat{\mathbf{z}}$';
         conf.dir = 'const_Bz';
@@ -29,14 +47,9 @@ function conf = trajectory_conf(c)
         conf.dir = 'dipole';
         conf.field = @dipole;
     end
-    conf.ro = ro;
-    conf.vo = vo;
-    conf.tend = tend;
+    
     conf.tau = tau;
-    conf.tlabel = '$t/\tau$';
-    conf.rlabels = {'$x/R_E$', '$y/R_E$', '$z/R_E$'};
     conf.rfilelabels = {'x','y','z'};
-    conf.vlabels = {'$v_x$', '$v_y$', '$v_z$'};
     conf.vfilelabels = {'vx','vy','vz'};
 end
 

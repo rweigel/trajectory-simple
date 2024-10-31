@@ -19,7 +19,7 @@ legend_ = {'Forward Euler', 'Runge-Kutta 4-5'};
 method = method(2);
 legend_ = legend_(2);
 for m = 1:length(method)
-    [t{m},r{m},v{m}] = trajectory(conf.ro,conf.vo,conf.tend,conf.field,method{m});
+    [t{m},r{m},v{m}] = trajectory(conf,method{m});
     E{m} = sum(v{m}.^2,2);
     %mu{m} = E{m}/norm(conf.field(r{m}));
     E{m} = E{m}/E{m}(1);
@@ -70,8 +70,8 @@ figprep(f)
     plot(r{m}(:,1),r{m}(:,2));
   end
   axis square;
-  set(gca,'XLim', [-1.5, 1.5])
-  set(gca,'YLim', [-1.5, 1.5])
+  %set(gca,'XLim', [-1.5, 1.5])
+  %set(gca,'YLim', [-1.5, 1.5])
   legend(legend_);
   xlabel(conf.rlabels{1});
   ylabel(conf.rlabels{2});
@@ -80,9 +80,8 @@ figprep(f)
       figsave(fullfile(cwd,'figs',conf.dir,fname));
   end
 
-if 0  
-figure(3)
-  clf;figprep;hold on;grid on;
+f = f+1;
+figprep(f)
   for m = 1:length(method)
     plot(t{m},E{m});
   end
@@ -91,6 +90,7 @@ figure(3)
   ylabel('$E/E_o$');
   figsave(fullfile(cwd,'figs',conf.dir,'E_vs_t'));
 
+if 0    
 figure(4)
   clf;figprep;hold on;grid on;
   for m = 1:length(method)
