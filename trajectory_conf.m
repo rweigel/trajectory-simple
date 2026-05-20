@@ -1,4 +1,4 @@
-function conf = trajectory_conf(c)
+function conf = trajectory_conf(c, dimensionless)
 
     Bo = 3e-5; % Tesla
     RE = 6378e3; % meter
@@ -6,21 +6,21 @@ function conf = trajectory_conf(c)
     q = 1.602e-19; % Coulomb
     tau = m/(q*Bo);
     
-    E = 1e8;
-    vox = sqrt((2*q/m)*E)
+    E = 1e7;
+    vox = sqrt((2*q/m)*E);
     %vox = 1e7;
-    ro = [3*RE, 0, 0];
+    ro = [2*RE, 0, 0];
     vo = [vox, 0, 0]; % m/s
 
-    conf = struct();    
-    if 1
+    conf = struct();
+    if dimensionless
         conf.parameters.Bo = 1;
         conf.parameters.RE = 1;
         conf.parameters.m = 1;
         conf.parameters.q = 1;
         conf.ro = ro/RE;
         conf.vo = vo/(RE/tau);
-        conf.tend = 20000;
+        conf.tend = 100/tau;
         conf.tlabel = '$t/\tau$';
         conf.rlabels = {'$x/R_E$', '$y/R_E$', '$z/R_E$'};
         conf.vlabels = {'$v_x/(R_E/\tau)$', '$v_y(R_E/\tau)$', '$v_z(R_E/\tau)$'};
@@ -31,7 +31,7 @@ function conf = trajectory_conf(c)
         conf.parameters.q = q;
         conf.ro = ro;
         conf.vo = vo;
-        conf.tend = 2;
+        conf.tend = 1;
         conf.tlabel = '$t$';
         conf.rlabels = {'$x$', '$y$', '$z$'};
         conf.vlabels = {'$v_x$', '$v_y$', '$v_z$'};

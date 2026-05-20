@@ -12,12 +12,12 @@ figsave_ = 0;
 cwd = fullfile(fileparts(mfilename('fullpath')));
 addpath(cwd,'m');
 
-conf = trajectory_conf(2);
+conf = trajectory_conf(2,0);
 
 method = {'fe', 'rk45'};
 legend_ = {'Forward Euler', 'Runge-Kutta 4-5'};
-method = method(2);
-legend_ = legend_(2);
+method = method(1);
+legend_ = legend_(1);
 for m = 1:length(method)
     [t{m},r{m},v{m}] = trajectory(conf,method{m});
     E{m} = sum(v{m}.^2,2);
@@ -70,8 +70,8 @@ figprep(f)
     plot(r{m}(:,1),r{m}(:,2));
   end
   axis square;
-  %set(gca,'XLim', [-1.5, 1.5])
-  %set(gca,'YLim', [-1.5, 1.5])
+  set(gca,'XLim', [-2.5, 2.5])
+  set(gca,'YLim', [-2.5, 2.5])
   legend(legend_);
   xlabel(conf.rlabels{1});
   ylabel(conf.rlabels{2});
